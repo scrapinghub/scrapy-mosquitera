@@ -14,13 +14,13 @@ class PaginationMixin(object):
     def _set_attributes_to_initial_state(self):
         # Each entry in registry has {'counter': int, 'nprs': []}
         self._request_registry = defaultdict(dict)
-        self.__response_id_cache = {}
+        self._response_id_cache = {}
 
     def __init__(self, *args, **kwargs):
         super(PaginationMixin, self).__init__(*args, **kwargs)
 
         self._set_attributes_to_initial_state()
-        self.__was_setup_called = False
+        self._was_setup_called = False
 
     def dm_setup(self):
         """ Set method for spider idle state.
@@ -31,7 +31,7 @@ class PaginationMixin(object):
             self.dequeue_next_page_requests,
             signal=signals.spider_idle
         )
-        self.__was_setup_called = True
+        self._was_setup_called = True
 
     def dm_teardown(self):
         """ Disconnect the method from the signal.
@@ -85,11 +85,11 @@ class PaginationMixin(object):
             It's a short-term cache, just for the current batch of responses.
 
         """
-        if response.url in self.__response_id_cache:
-            return self.__response_id_cache[response.url]
+        if response.url in self._response_id_cache:
+            return self._response_id_cache[response.url]
         else:
             response_id = str(uuid.uuid4())
-            self.__response_id_cache[response.url] = response_id
+            self._response_id_cache[response.url] = response_id
             return response_id
 
     @staticmethod
@@ -100,7 +100,7 @@ class PaginationMixin(object):
         """
         @wraps(fn)
         def inner(self, *args, **kwargs):
-            if not self.__was_setup_called:
+            if not self._was_setup_called:
                 self.dm_setup()
 
             response = self._get_response(args, kwargs)
