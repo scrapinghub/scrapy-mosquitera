@@ -8,6 +8,7 @@ from scrapy import signals
 from scrapy.http import Request, Response
 from scrapy.exceptions import DontCloseSpider
 from pydispatch import dispatcher
+from pydispatch.errors import DispatcherKeyError
 
 
 class PaginationMixin(object):
@@ -38,10 +39,13 @@ class PaginationMixin(object):
         It's done to avoid conflicts when many instances of the mixin are being executed.
 
         """
-        dispatcher.disconnect(
-            self.dequeue_next_page_requests,
-            signal=signals.spider_idle
-        )
+        try:
+            dispatcher.disconnect(
+                self.dequeue_next_page_requests,
+                signal=signals.spider_idle
+            )
+        except DispatcherKeyError:
+            pass
 
     @staticmethod
     def _add_identifiers_to_request(request, response_id):
@@ -59,9 +63,10 @@ class PaginationMixin(object):
     def _decrease_counter(self, response):
         """ Decrease registry counter for identifier inside ``response``. """
         response_id = response.meta['__id']
-        self._request_registry[response_id]['counter'] -= 1
+        spot = self._request_registry[response_id]
+        spot['counter'] = spot.get('counter', 0) - 1
 
-    def _get_response(self, args, kwargs):
+    def _get_response(self, args=[], kwargs={}):
         """ Get response from ``args`` or ``kwargs``. """
         # If you're decorating a function without response objects as arguments
         # or invalid ones, you can set this attribute that has precedence.
@@ -112,13 +117,8 @@ class PaginationMixin(object):
                 return
 
             if isinstance(result, Request):
-                # Single request
-                r = self._add_identifiers_to_request(result, response_id)
-                self._increase_counter(response)
+                result = [result]
 
-                return r
-
-            # Assume it's a generator or list
             request_list = []
             for r in result:
                 if isinstance(r, Request):
