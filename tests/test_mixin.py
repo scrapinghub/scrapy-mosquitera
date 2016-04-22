@@ -110,7 +110,7 @@ def deregister_response(mixin_instance):
 
 @when('I enqueue a method returning <n_requests>')
 def enqueue_a_method_returning_n_requests(n_requests, mixin_instance):
-    @mixin_instance.queue_next_page_requests
+    @mixin_instance.enqueue_next_page_requests
     def generate_requests(self, number):
         r = []
         for i in range(number):

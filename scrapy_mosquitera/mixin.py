@@ -148,8 +148,8 @@ class PaginationMixin(object):
         return inner
 
     @staticmethod
-    def queue_next_page_requests(fn):
-        """ Queue next page requests to be only requested if they meet the conditions """
+    def enqueue_next_page_requests(fn):
+        """ Enqueue next page requests to be only requested if they meet the conditions """
         @wraps(fn)
         def inner(self, *args, **kwargs):
             logging.debug("[+] Queueing next page calls ..")
