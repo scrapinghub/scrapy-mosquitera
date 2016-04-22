@@ -20,15 +20,10 @@ def _to_datetime(v):
 
 def has_valid_date(target_date, min_date, max_date):
     """ Return ``True`` if ``target_date`` is inside the range [min_date, max_date] """
-    result = True
+    min_date = min_date or datetime.datetime.min
+    max_date = max_date or datetime.datetime.max
 
-    if min_date:
-        result = min_date <= target_date
-
-    if result and max_date:
-        result &= target_date < max_date
-
-    return result
+    return min_date <= target_date < max_date
 
 
 def _get_min_date(kwargs):
