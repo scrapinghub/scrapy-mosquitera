@@ -20,20 +20,20 @@ def _to_datetime(v):
 
 def has_valid_date(target_date, min_date, max_date):
     """ Return ``True`` if ``target_date`` is inside the range [min_date, max_date] """
-    min_date = min_date or datetime.datetime.min
-    max_date = max_date or datetime.datetime.max
-
     return min_date <= target_date < max_date
 
 
 def _get_min_date(kwargs):
     """ Return datetime object or None. """
-    min_date = None
+    min_date = datetime.datetime.min
     on = kwargs.get('on')
     after = kwargs.get('after')
     since = kwargs.get('since')
+    min_date_arg = kwargs.get('min_date')
 
-    if on:
+    if min_date_arg:
+        min_date = _to_datetime(min_date_arg)
+    elif on:
         min_date = _to_datetime(on)
     elif after:
         min_date = _to_datetime(after)
@@ -49,11 +49,14 @@ def _get_max_date(kwargs):
     Time in result is set to 23:59 if no time is provided.
 
     """
-    max_date = None
+    max_date = datetime.datetime.max
     on = kwargs.get('on')
     before = kwargs.get('before')
+    max_date_arg = kwargs.get('max_date')
 
-    if on:
+    if max_date_arg:
+        max_date = _to_datetime(max_date_arg)
+    elif on:
         max_date = _to_datetime(on)
     elif before:
         max_date = _to_datetime(before)
