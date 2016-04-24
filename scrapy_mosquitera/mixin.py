@@ -73,7 +73,7 @@ class PaginationMixin(object):
         if hasattr(self, 'response_for_pagination_mixin'):
             return self.response_for_pagination_mixin
 
-        total_args = list(args) + kwargs.values()
+        total_args = list(args) + list(kwargs.values())
         response_objs = [obj for obj in total_args if isinstance(obj, Response)]
         n_response_objs = len(response_objs)
 

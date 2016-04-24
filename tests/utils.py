@@ -1,7 +1,7 @@
-from scrapy.http import Response, Request, HtmlResponse, XmlResponse
+from scrapy.http import Response, Request, TextResponse, XmlResponse
 
 
-class HtmlResponseWithMeta(HtmlResponse, Response):
+class HtmlResponseWithMeta(TextResponse, Response):
     pass
 
 
@@ -17,4 +17,4 @@ def given_response(url='http://domain/path/', body='', meta={}, status=200, dtyp
     elif dtype == 'xml':
         response_class = XmlResponseWithMeta
 
-    return response_class(url, body=body, request=r, status=status)
+    return response_class(url, body=body, request=r, status=status, encoding='ascii')
