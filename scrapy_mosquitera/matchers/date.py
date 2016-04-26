@@ -28,7 +28,16 @@ def has_valid_date(target_date, min_date, max_date):
 
 
 def _get_min_date(kwargs):
-    """ Return datetime object or None. """
+    """ Return datetime object or None.
+
+    Accepted parameters:
+
+    * min_date
+    * on
+    * after
+    * since
+
+    """
     min_date = datetime.datetime.min
     on = kwargs.get('on')
     after = kwargs.get('after')
@@ -52,6 +61,12 @@ def _get_max_date(kwargs):
 
     Time in result is set to 23:59 if no time is provided.
 
+    Accepted parameters:
+
+    * max_date
+    * on
+    * before
+
     """
     max_date = datetime.datetime.max
     on = kwargs.get('on')
@@ -73,16 +88,14 @@ def _get_max_date(kwargs):
 
 
 def date_matches(data, **kwargs):
-    """ Return ``True`` or ``False`` if ``data`` has a valid date.
+    """ Return ``True`` if ``data`` is a date in the valid date range.
+    Otherwise ``False``.
 
-    Arguments in kwargs:
-
-    * on : min date is date at 00:00 and max date is date at 23:59
-    * since or after: sets min date
-    * before: sets max date, at 23:59 if no time is provided
-
-    ``data`` and ``kwargs`` arguments can use any valid datetime object or
-    more human-readable sentences like '3 days ago' as far as dateparser supports it.
+    :param data: the date to validate
+    :type data: string, date or datetime
+    :param kwargs: special delimitation parameters
+    :type kwargs: dict
+    :rtype: bool
 
     """
     if not data:
@@ -96,7 +109,47 @@ def date_matches(data, **kwargs):
 
 
 def date_in_period_matches(data, period='day', check_maximum=True, **kwargs):
-    """ Return ``True`` if ``data`` is in the valid date range defined by ``period``.
+    """ Return ``True`` if ``data`` is a date in the valid date range defined by ``period``.
+        Otherwise ``False``.
+
+        This matcher is ideal for cases like the following one.
+
+        A forum post is created at *04-10-2016*. Then on *04-28-2016*,
+        I try to scrape the forum covering the last few days.
+        However, the forum doesn't display the post date but some sentences like *X weeks ago*.
+        So, in the forum nomenclature, the posts fall in the next table:
+
+        +------------+------------+-----------------+
+        | Start date | End date   | Name            |
+        +============+============+=================+
+        | 04-15-2016 | 04-21-2016 | One week ago    |
+        +------------+------------+-----------------+
+        | 04-08-2016 | 04-14-2016 | Two weeks ago   |
+        +------------+------------+-----------------+
+        | 04-01-2016 | 04-07-2016 | Three weeks ago |
+        +------------+------------+-----------------+
+
+        On *04-28-2016*, if I calculate *two weeks ago* it will return *04-14-2016*.
+        Comparing it to the forum meaning, we're working with fixed dates and
+        the forum with date ranges.
+        Then, if I scrape until *04-10-2016*, the crawl will miss the posts
+        from *04-10-2016* to *04-13-2016* since the last valid date would be *two weeks ago*
+        (*three weeks ago* is out of scope (*04-07-2016* < *10-07-2016*)).
+
+        This matcher comes to solve this, so you can provide the period (in this case **week**)
+        and you won't miss items by coverage issues.
+        However, it's inclusive because to satisfy the date *04-10-2016* it will include the full week
+        [04-08-2016, 04-14-2016], so a post-filtering should be made to only allow valid items.
+
+        :param data: the date to validate
+        :type data: string, date or datetime
+        :param period: the period to evaluate ('day', 'month', 'year')
+        :type period: string
+        :param check_maximum: check maximum date
+        :type check_maximum: bool
+        :param kwargs: special delimitation parameters
+        :type kwargs: dict
+        :rtype: bool
 
     """
     if not data:
