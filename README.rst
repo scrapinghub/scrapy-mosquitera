@@ -33,11 +33,10 @@ the matcher function directly in your code::
 
    if date_matches(data=date, after='5 days ago'):
       yield Request(url=url, callback=self.parse_item)
-      yield self.follow_next_page(response)
 
 
 To handle the case when the date is only available at the time when you scrape
-the items, **scrapy-mosquitera** provides a ``PaginationMixin`` to control the
+the items, **scrapy-mosquitera** provides a :ref:`PaginationMixin <mixin>` to control the
 crawl according to the dates scraped.
 
 .. TODO: add link to official documentation here

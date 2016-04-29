@@ -35,6 +35,9 @@ In example, we'll consider a blog archive page.
 
 It's the simpler case since we can do the matching
 at the method parsing the listing.
+We will use :func:`date_matches <.date_matches>` to do the match
+and it let us control the pagination in an easy way.
+
 
 .. code-block:: python
 
@@ -56,10 +59,8 @@ at the method parsing the listing.
     if continue_to_next_page:
       yield self.call_next_page(response)
 
-The ``date_matches`` function is powered by `dateparser`,
-so it can support written dates and datetime objects too.
-The matcher let us control the pagination in an easy way.
 
+.. _example_mixin:
 
 Dates absent
 ------------
@@ -91,23 +92,11 @@ Dates aren't present on the listing, but they are in each post page.
   [...]
 
 
-Here comes ``PaginationMixin``, which is a mixin with a group of decorators
-to control the logic of requesting the next page.
-It has an interesting flow, which could be summarized as:
-
-   1. At the listing parsing method, every item page request is yielded.
-      Each request is marked to be associated with the current response
-      and any pagination requests is enqueued.
-   2. At the item parsing method, the matching logic is applied and
-      each valid item and its related request is registered.
-   3. After comparing the yielded requests at step 1 and the requests
-      which yielded valid items at step 2, the mixin decides
-      to dequeue the next page request only if every request yielded a valid item.
-
-So to see it in action in a comparable way with the first example,
+Here comes :ref:`PaginationMixin <mixin>` which is a mixin specialize for these cases.
+To see it in action in a comparable way with the first example,
 let's start using their decorators.
-``@PaginationMixin.register_requests`` has to be applied
-to the listing parsing method.
+:meth:`@PaginationMixin.register_requests <.PaginationMixin.register_requests>`
+has to be applied to the listing parsing method.
 
 .. code-block:: python
 
@@ -128,7 +117,8 @@ every item request will be made since we don't know yet
 if its content is valid or not.
 The method in charge of returning the next page request,
 in this case ``call_next_page``,
-has to be decorated with ``@PaginationMixin.enqueue_next_page_requests``.
+has to be decorated with
+:meth:`@PaginationMixin.enqueue_next_page_requests <.PaginationMixin.enqueue_next_page_requests>`.
 
 .. code-block:: python
 
@@ -140,7 +130,8 @@ has to be decorated with ``@PaginationMixin.enqueue_next_page_requests``.
 This decorator saves the request to be called only if it's necessary.
 Then, the last decorator has to be applied on the method parsing the item
 since it has to register if a valid item was returned.
-This decorator is ``@PaginationMixin.deregister_response``.
+This decorator is
+:meth:`@PaginationMixin.deregister_response <.PaginationMixin.deregister_response>`.
 
 .. code-block:: python
 
@@ -157,3 +148,5 @@ After that, we're ready to run our spider.
 First, it will make three requests, one for each post page and the pagination request will be saved.
 Then, if the three post are valid, they will be scraped and the next page request will be made.
 Otherwise, it only scrape the valid posts and the spider run will finish.
+
+.. _dateparser: https://github.com/scrapinghub/dateparser

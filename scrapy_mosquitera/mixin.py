@@ -102,6 +102,8 @@ class PaginationMixin(object):
         """ Register requests yielded from ``fn`` in the registry
             using as key its parent response id.
 
+            It's a decorator.
+
         """
         @wraps(fn)
         def inner(self, *args, **kwargs):
@@ -133,7 +135,11 @@ class PaginationMixin(object):
 
     @staticmethod
     def deregister_response(fn):
-        """ Deregister response from the registry. """
+        """ Deregister response from the registry.
+
+        It's a decorator.
+
+        """
         @wraps(fn)
         def inner(self, *args, **kwargs):
             item_or_request = fn(self, *args, **kwargs)
@@ -149,7 +155,11 @@ class PaginationMixin(object):
 
     @staticmethod
     def enqueue_next_page_requests(fn):
-        """ Enqueue next page requests to be only requested if they meet the conditions """
+        """ Enqueue next page requests to be only requested if they meet the conditions.
+
+        It's a decorator.
+
+         """
         @wraps(fn)
         def inner(self, *args, **kwargs):
             logging.debug("[+] Queueing next page calls ..")

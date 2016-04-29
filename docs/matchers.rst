@@ -6,7 +6,9 @@ Matchers
 Creating your own matcher
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A matcher is a simple function returning a boolean value.
+A matcher is a simple function taking the data to be evaluated as argument(s)
+and returning a boolean value according to its validity.
+
 
 Current matchers
 ----------------

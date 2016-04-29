@@ -63,7 +63,7 @@ coverage:
 docs:
 	rm -f docs/scrapy_mosquitera.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ scrapy_mosquitera
+	#sphinx-apidoc -o docs/ scrapy_mosquitera
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
