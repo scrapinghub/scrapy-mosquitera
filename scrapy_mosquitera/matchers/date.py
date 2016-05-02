@@ -178,7 +178,7 @@ def date_in_period_matches(data, period='day', check_maximum=True, **kwargs):
         the forum with date ranges.
         Then, if I scrape until *04-10-2016*, the crawl will miss the posts
         from *04-10-2016* to *04-13-2016* since the last valid date would be *two weeks ago*
-        (*three weeks ago* is out of scope (*04-07-2016* < *10-07-2016*)).
+        (*three weeks ago* is out of scope (*04-07-2016* < *04-10-2016*)).
 
         This matcher comes to solve this, so you can provide the period (in this case **week**)
         and you won't miss items by coverage issues.
