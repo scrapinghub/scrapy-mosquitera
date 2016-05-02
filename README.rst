@@ -36,8 +36,9 @@ the matcher function directly in your code::
 
 
 To handle the case when the date is only available at the time when you scrape
-the items, **scrapy-mosquitera** provides a :ref:`PaginationMixin <mixin>` to control the
+the items, **scrapy-mosquitera** provides a ``PaginationMixin`` to control the
 crawl according to the dates scraped.
 
 .. TODO: add link to official documentation here
+
 Head on to the remaining of the documentation for more details.
