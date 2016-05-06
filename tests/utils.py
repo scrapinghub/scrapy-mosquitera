@@ -1,7 +1,7 @@
-from scrapy.http import Response, Request, TextResponse, XmlResponse
+from scrapy.http import Response, Request, HtmlResponse, XmlResponse
 
 
-class HtmlResponseWithMeta(TextResponse, Response):
+class HtmlResponseWithMeta(HtmlResponse, Response):
     pass
 
 
