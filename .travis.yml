@@ -6,3 +6,15 @@ env:
 install:
   - pip install -U tox
 script: tox
+
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: scrapinghub
+  password:
+    secure: pQWfrb+0Uf2P2JxoNJE+rqFTz1/OOnSBRrgvLQsg5UjM2YBbG+8zgMrl5IY0hDMShVhJjb9E3ZV/GnPI/fJaIyX2D2Z8udm6z5c6XniXxBdsbwUafe4kWnJ8efusay3MwIfm3i2Qg80oD5CyVfVBMKBReOkmpPsk54B275yHHf6aU/mhiukDsBsxGzlmespmKA10F7d09VoFdpyTUyTof58a0s0lsoRfP1OrbqTukM3eC+OrhA3hFjoL2z4J41a52GxVORkuerNbFyBcWAM8+xEBj6DWFvpKJOB1RGy/ptQQrQA3iQgzouaXNHpMUNI0U1w2821pO0bPZT/6oyk4C/sMfomrbjtYiJuXzIAcR3J7/Cydv2VuypsvlMqHakniYobkT4d22ptAaTQempudF1wRAqCoBHUIyAqyOrNTwNEYu/oPcoVFXnSY75y6zkX61z42xNYvpxbzzHeGg6ae56X1pQdQKkLnUksB5mi8VsjdcAkSZOwpH3FXVjwzjTW9EUmDrA3NNOit9/n444QCITbe5q9c+WKQmMWDOKDqbhfbi4C3yms4vZnGb5P1umddu+DeqFilrXjkpiXebsy7laD4U9cNrq4/kSzp6s4ROzjkKfCjOcU5Sf8cMyY7Rkgaxf6HIxMVR48miyqTxklTjtJCoGjuR5nD1LNbusrlCR4=
+  on:
+    tags: true
+    all_branches: true
+    repo: scrapinghub/scrapy-mosquitera
+    condition: "$TOXENV == py27"
