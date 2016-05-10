@@ -6,6 +6,14 @@ scrapy-mosquitera - tools for filtered scraping
 .. image:: https://travis-ci.org/scrapinghub/scrapy-mosquitera.svg?branch=master
         :target: https://travis-ci.org/scrapinghub/scrapy-mosquitera
 
+.. image:: https://img.shields.io/pypi/v/scrapy-mosquitera.svg?maxAge=2592000
+        :target: https://pypi.python.org/pypi/scrapy-mosquitera
+
+.. image:: https://img.shields.io/pypi/pyversions/scrapy-mosquitera.svg?maxAge=2592000
+
+.. image:: https://img.shields.io/pypi/l/scrapy-mosquitera.svg?maxAge=2592000
+
+
 
 .. epigraph::
 
@@ -46,3 +54,11 @@ crawl according to the dates scraped.
 Head on to the remaining of the `documentation`_  for more details.
 
 .. _documentation: http://scrapy-mosquitera.readthedocs.io
+
+
+Installation
+============
+
+The quick way::
+
+    pip install scrapy-mosquitera
