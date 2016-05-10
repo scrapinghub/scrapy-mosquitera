@@ -3,6 +3,10 @@ scrapy-mosquitera - tools for filtered scraping
 ===============================================
 
 
+.. image:: https://travis-ci.org/scrapinghub/scrapy-mosquitera.svg?branch=master
+        :target: https://travis-ci.org/scrapinghub/scrapy-mosquitera
+
+
 .. epigraph::
 
    How can I scrape items off a site from the last five days?
@@ -39,6 +43,6 @@ To handle the case when the date is only available at the time when you scrape
 the items, **scrapy-mosquitera** provides a ``PaginationMixin`` to control the
 crawl according to the dates scraped.
 
-.. TODO: add link to official documentation here
+Head on to the remaining of the `documentation`_  for more details.
 
-Head on to the remaining of the documentation for more details.
+.. _documentation: http://scrapy-mosquitera.readthedocs.io
