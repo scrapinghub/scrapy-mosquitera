@@ -1,5 +1,6 @@
 import uuid
 import logging
+import types
 
 from collections import defaultdict
 from functools import wraps
@@ -118,6 +119,9 @@ class PaginationMixin(object):
             if not result:
                 return
 
+            # Save original type to return the same results from ``fn``
+            original_type = type(result)
+
             if isinstance(result, Request):
                 result = [result]
 
@@ -129,7 +133,10 @@ class PaginationMixin(object):
 
                 request_list.append(r)
 
-            return request_list
+            if original_type in (list, types.GeneratorType):
+                return request_list
+            else:
+                return request_list[0]
 
         return inner
 
