@@ -10,7 +10,7 @@ test_requirements = open('tests/requirements.txt').read().splitlines()
 
 setup(
     name='scrapy-mosquitera',
-    version='0.1.1',
+    version='0.1.2',
     url='https://github.com/scrapinghub/scrapy-mosquitera',
     description="Restrict crawl and scraping scope using matchers.",
     long_description=readme,
