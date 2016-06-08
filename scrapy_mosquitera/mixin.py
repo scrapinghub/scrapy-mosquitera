@@ -1,6 +1,7 @@
 import uuid
 import logging
 import types
+import itertools
 
 from collections import defaultdict
 from functools import wraps
@@ -10,6 +11,22 @@ from scrapy.http import Request, Response
 from scrapy.exceptions import DontCloseSpider
 from pydispatch import dispatcher
 from pydispatch.errors import DispatcherKeyError
+
+
+def get_consistent_generator(iterable):
+    """ Return the generator only if it has elements to yield and
+    the elements is not ``None``
+
+    """
+    try:
+        first = next(iterable)
+    except StopIteration:
+        return None
+
+    if first is None:
+        return None
+
+    return itertools.chain([first], iterable)
 
 
 class PaginationMixin(object):
@@ -150,6 +167,9 @@ class PaginationMixin(object):
         @wraps(fn)
         def inner(self, *args, **kwargs):
             item_or_request = fn(self, *args, **kwargs)
+
+            if isinstance(item_or_request, types.GeneratorType):
+                item_or_request = get_consistent_generator(item_or_request)
 
             # Only decrease counter if the item_or_request passed the filter
             if item_or_request:
